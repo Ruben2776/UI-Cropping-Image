@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -13,7 +13,7 @@ namespace CroppingImageLibrary.SampleApp
     {
         private CroppingWindow _croppingWindow;
         // private BitmapImage bitmapImage;
-        private Bitmap sourceBitmap;
+        private BitmapSource sourceBitmap;
 
         public MainWindow()
         {
@@ -26,12 +26,15 @@ namespace CroppingImageLibrary.SampleApp
         {
             if (_croppingWindow != null)
                 return;
-            OpenFileDialog op = new OpenFileDialog();
-            op.Title  = "Select a picture";
-            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" + "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" + "Portable Network Graphic (*.png)|*.png";
+            OpenFileDialog op = new OpenFileDialog
+            {
+                Title = "Select a picture",
+                Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" + "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" + "Portable Network Graphic (*.png)|*.png"
+            };
             if (op.ShowDialog() == true)
             {
-                sourceBitmap = new Bitmap(op.FileName);
+                sourceBitmap = new BitmapImage(new Uri(op.FileName));
+
                 _croppingWindow = new CroppingWindow(new BitmapImage(new Uri(op.FileName)));
                 _croppingWindow.Closed += (a, b) => _croppingWindow = null;
                 _croppingWindow.Height = new BitmapImage(new Uri(op.FileName)).Height;
@@ -45,18 +48,12 @@ namespace CroppingImageLibrary.SampleApp
         {
             var cropArea = _croppingWindow.CropTool.CropService.GetCroppedArea();
 
-            System.Drawing.Rectangle cropRect = new System.Drawing.Rectangle((int) cropArea.CroppedRectAbsolute.X,
-                (int) cropArea.CroppedRectAbsolute.Y, (int) cropArea.CroppedRectAbsolute.Width,
-                (int) cropArea.CroppedRectAbsolute.Height);
+            var x = Convert.ToInt32(cropArea.CroppedRectAbsolute.X);
+            var y = Convert.ToInt32(cropArea.CroppedRectAbsolute.Y);
+            var width = Convert.ToInt32(cropArea.CroppedRectAbsolute.Width);
+            var height = Convert.ToInt32(cropArea.CroppedRectAbsolute.Height);
 
-            Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
-
-            using (Graphics g = Graphics.FromImage(target))
-            {
-                g.DrawImage(sourceBitmap, new System.Drawing.Rectangle(0, 0, target.Width, target.Height),
-                    cropRect,
-                    GraphicsUnit.Pixel);
-            }
+            var cb = new CroppedBitmap(sourceBitmap, new Int32Rect(x, y, width, height));       //select region rect
 
             //save image to file
             SaveFileDialog dlg = new SaveFileDialog
@@ -72,10 +69,13 @@ namespace CroppingImageLibrary.SampleApp
             // Process save file dialog box results
             if (result != true)
                 return;
-            
+
             // Save document
-            string filename  = dlg.FileName;
-            target.Save(filename);
+
+            using var fileStream = new FileStream(dlg.FileName, FileMode.Create);
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(cb));
+            encoder.Save(fileStream);
         }
     }
 }

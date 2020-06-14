@@ -49,7 +49,7 @@ namespace CroppingImageLibrary
             CropService = new CropService(this , SquareSelection);
         }
 
-        public void SetImage(BitmapImage bitmapImage)
+        public void SetImage(BitmapSource bitmapImage)
         {
             SourceImage.Source = bitmapImage;
             RootGrid.Height = bitmapImage.Height;

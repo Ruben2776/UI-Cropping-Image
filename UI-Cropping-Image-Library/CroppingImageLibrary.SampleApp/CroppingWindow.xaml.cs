@@ -13,7 +13,7 @@ namespace CroppingImageLibrary.SampleApp
             InitializeComponent();
         }
 
-        public CroppingWindow(BitmapImage bitmapImage)
+        public CroppingWindow(BitmapSource bitmapImage)
         {
             InitializeComponent();
             //  pass data to custom user control
