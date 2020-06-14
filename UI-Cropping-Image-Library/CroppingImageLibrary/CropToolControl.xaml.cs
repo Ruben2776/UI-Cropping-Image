@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CroppingImageLibrary.Services;
 
@@ -52,8 +53,18 @@ namespace CroppingImageLibrary
         public void SetImage(BitmapSource bitmapImage)
         {
             SourceImage.Source = bitmapImage;
-            RootGrid.Height = bitmapImage.Height;
-            RootGrid.Width = bitmapImage.Width;
         }
+
+        public void SetSize(double width, double height)
+        {
+            RootGrid.Width = width;
+            RootGrid.Height = height;            
+        }
+
+        public void SetBackground(Brush brush)
+        {
+            BackgroundColor.Background = brush;
+        }
+
     }
 }

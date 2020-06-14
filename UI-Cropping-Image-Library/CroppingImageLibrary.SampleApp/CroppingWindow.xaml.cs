@@ -13,11 +13,10 @@ namespace CroppingImageLibrary.SampleApp
             InitializeComponent();
         }
 
-        public CroppingWindow(BitmapSource bitmapImage)
+        public void SetImage(BitmapSource bitmapImage, double width, double height)
         {
-            InitializeComponent();
-            //  pass data to custom user control
             CropTool.SetImage(bitmapImage);
+            CropTool.SetSize(width, Height);
         }
     }
 }

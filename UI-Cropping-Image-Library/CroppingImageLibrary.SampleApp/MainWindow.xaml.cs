@@ -35,10 +35,23 @@ namespace CroppingImageLibrary.SampleApp
             {
                 sourceBitmap = new BitmapImage(new Uri(op.FileName));
 
-                _croppingWindow = new CroppingWindow(new BitmapImage(new Uri(op.FileName)));
+                _croppingWindow = new CroppingWindow();
                 _croppingWindow.Closed += (a, b) => _croppingWindow = null;
-                _croppingWindow.Height = new BitmapImage(new Uri(op.FileName)).Height;
-                _croppingWindow.Width  = new BitmapImage(new Uri(op.FileName)).Width;
+
+
+                double width = sourceBitmap.PixelWidth;
+                double height = sourceBitmap.PixelHeight;
+                double maxWidth = Math.Min(SystemParameters.PrimaryScreenWidth - 300, width);
+                double maxHeight = Math.Min(SystemParameters.PrimaryScreenHeight - 300, height);
+
+                var aspectRatio = Math.Min(maxWidth / width, maxHeight / height);
+                width *= aspectRatio;
+                height *= aspectRatio;
+
+                _croppingWindow.Width =  width;
+                _croppingWindow.Height = height;
+                _croppingWindow.SetImage(new BitmapImage(new Uri(op.FileName)), width, height);
+
 
                 _croppingWindow.Show();
             }
