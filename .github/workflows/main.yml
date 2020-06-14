@@ -44,7 +44,7 @@ jobs:
        msbuild.exe UI-Cropping-Image-Library/UI-Cropping-Image-Library.sln /p:platform="Any CPU" /p:configuration="Release"
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v1.0.2
       with:
        name: EZRepBundle
        path: "./UI-Cropping-Image-Library/CroppingImageLibrary.SampleApp/bin/Release/"
@@ -53,7 +53,7 @@ jobs:
       run: nuget pack ./UI-Cropping-Image-Library/CroppingImageLibrary/CroppingImageLibrary.csproj -Properties Configuration=Release
 
     - name: Nuget Push
-      run: nuget push PicViewCroppingImageLibrary.1.0.1.2.nupkg ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json   
+      run: nuget push PicViewCroppingImageLibrary.1.0.2.nupkg ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json   
 
     - name: Show Content
       run: dir
