@@ -61,6 +61,11 @@ namespace CroppingImageLibrary
             RootGrid.Height = height;            
         }
 
+        public void SetStretch(Stretch stretch)
+        {
+            SourceImage.Stretch = stretch;
+        }
+
         public void SetBackground(Brush brush)
         {
             BackgroundColor.Background = brush;

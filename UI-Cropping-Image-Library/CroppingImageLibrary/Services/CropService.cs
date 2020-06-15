@@ -26,7 +26,7 @@ namespace CroppingImageLibrary.Services
     {
         private readonly CropAdorner _cropAdorner;
         private readonly Canvas _canvas;
-        private readonly Tools.CropTool _cropTool;
+        private readonly CropTool _cropTool;
 
         private IToolState _currentToolState;
         private readonly IToolState _createState;

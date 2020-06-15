@@ -16,7 +16,7 @@ namespace CroppingImageLibrary.SampleApp
         public void SetImage(BitmapSource bitmapImage, double width, double height)
         {
             CropTool.SetImage(bitmapImage);
-            CropTool.SetSize(width, Height);
+            CropTool.SetSize(width, height);
         }
     }
 }

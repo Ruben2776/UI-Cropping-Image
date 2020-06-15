@@ -31,30 +31,29 @@ namespace CroppingImageLibrary.SampleApp
                 Title = "Select a picture",
                 Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" + "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" + "Portable Network Graphic (*.png)|*.png"
             };
-            if (op.ShowDialog() == true)
-            {
-                sourceBitmap = new BitmapImage(new Uri(op.FileName));
+            if (op.ShowDialog() != true) { return; }
 
-                _croppingWindow = new CroppingWindow();
-                _croppingWindow.Closed += (a, b) => _croppingWindow = null;
+            sourceBitmap = new BitmapImage(new Uri(op.FileName));
 
-
-                double width = sourceBitmap.PixelWidth;
-                double height = sourceBitmap.PixelHeight;
-                double maxWidth = Math.Min(SystemParameters.PrimaryScreenWidth - 300, width);
-                double maxHeight = Math.Min(SystemParameters.PrimaryScreenHeight - 300, height);
-
-                var aspectRatio = Math.Min(maxWidth / width, maxHeight / height);
-                width *= aspectRatio;
-                height *= aspectRatio;
-
-                _croppingWindow.Width =  width;
-                _croppingWindow.Height = height;
-                _croppingWindow.SetImage(new BitmapImage(new Uri(op.FileName)), width, height);
+            _croppingWindow = new CroppingWindow();
+            _croppingWindow.Closed += (a, b) => _croppingWindow = null;
 
 
-                _croppingWindow.Show();
-            }
+            double width = sourceBitmap.PixelWidth;
+            double height = sourceBitmap.PixelHeight;
+            double maxWidth = Math.Min(SystemParameters.PrimaryScreenWidth - 300, width);
+            double maxHeight = Math.Min(SystemParameters.PrimaryScreenHeight - 300, height);
+
+            var aspectRatio = Math.Min(maxWidth / width, maxHeight / height);
+            width *= aspectRatio;
+            height *= aspectRatio;
+
+            _croppingWindow.Width = width;
+            _croppingWindow.Height = height;
+            _croppingWindow.SetImage(new BitmapImage(new Uri(op.FileName)), width, height);
+
+
+            _croppingWindow.Show();
         }
 
         private void Button_SaveImage(object sender, RoutedEventArgs e)

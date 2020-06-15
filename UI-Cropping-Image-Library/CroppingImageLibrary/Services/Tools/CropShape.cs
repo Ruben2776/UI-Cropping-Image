@@ -52,27 +52,27 @@ namespace CroppingImageLibrary.Services.Tools
         public void UpdateRectangle(double newX, double newY, double newWidth, double newHeight)
         {
             //dont use negative value
-            if (newHeight >= 0 && newWidth >= 0)
+            if (newHeight < 0 || newWidth < 0)  { return; }
+
+            Canvas.SetLeft(Shape, newX);
+            Canvas.SetTop(Shape, newY);
+            Shape.Height = newHeight;
+            Shape.Width = newHeight;
+
+            if (Shape.Height > _originalCanvas.ActualWidth)
             {
-                Canvas.SetLeft(Shape, newX);
-                Canvas.SetTop(Shape, newY);
-                Shape.Height = newHeight;
-                Shape.Width = newHeight;
-
-                if (Shape.Height > _originalCanvas.ActualWidth)
-                {
-                    Canvas.SetLeft(Shape, 0);
-                    Shape.Height = _originalCanvas.ActualWidth;
-                    Shape.Width = _originalCanvas.ActualWidth;
-                }
-
-                if (Shape.Height + newX > _originalCanvas.ActualWidth)
-                {
-                    Canvas.SetLeft(Shape, _originalCanvas.ActualWidth - Shape.ActualWidth);
-                }
-                //we need to update dashed rectangle too
-                // UpdateDashedRectangle();
+                Canvas.SetLeft(Shape, 0);
+                Shape.Height = _originalCanvas.ActualWidth;
+                Shape.Width = _originalCanvas.ActualWidth;
             }
+
+            if (Shape.Height + newX > _originalCanvas.ActualWidth)
+            {
+                Canvas.SetLeft(Shape, _originalCanvas.ActualWidth - Shape.ActualWidth);
+            }
+
+            //we need to update dashed rectangle too
+            // UpdateDashedRectangle();
         }
 
     }
