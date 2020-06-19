@@ -12,8 +12,8 @@
         Loaded="RootGrid_Loaded"
         MouseLeftButtonDown="RootGrid_OnMouseLeftButtonDown"
         MouseLeftButtonUp="RootGrid_MouseLeftButtonUp">
-        <Border x:Name="BackgroundColor" Background="#CD007ACC">
-            <Image x:Name="SourceImage" Stretch="None" />
+        <Border x:Name="BackgroundColor" Background="#CD323232">
+            <Image x:Name="SourceImage" Stretch="Fill" />
         </Border>
     </Grid>
 </UserControl>

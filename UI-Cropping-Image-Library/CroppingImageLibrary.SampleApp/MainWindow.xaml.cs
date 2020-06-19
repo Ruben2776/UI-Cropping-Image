@@ -14,6 +14,7 @@ namespace CroppingImageLibrary.SampleApp
         private CroppingWindow _croppingWindow;
         // private BitmapImage bitmapImage;
         private BitmapSource sourceBitmap;
+        private double ImageWidth, ImageHeight, AspectRatio;
 
         public MainWindow()
         {
@@ -39,18 +40,16 @@ namespace CroppingImageLibrary.SampleApp
             _croppingWindow.Closed += (a, b) => _croppingWindow = null;
 
 
-            double width = sourceBitmap.PixelWidth;
-            double height = sourceBitmap.PixelHeight;
-            double maxWidth = Math.Min(SystemParameters.PrimaryScreenWidth - 300, width);
-            double maxHeight = Math.Min(SystemParameters.PrimaryScreenHeight - 300, height);
+            double maxWidth = Math.Min(SystemParameters.PrimaryScreenWidth - 300, sourceBitmap.PixelWidth);
+            double maxHeight = Math.Min(SystemParameters.PrimaryScreenHeight - 300, sourceBitmap.PixelHeight);
 
-            var aspectRatio = Math.Min(maxWidth / width, maxHeight / height);
-            width *= aspectRatio;
-            height *= aspectRatio;
+            AspectRatio = Math.Min(maxWidth / sourceBitmap.PixelWidth, maxHeight / sourceBitmap.PixelHeight);
+            ImageWidth = sourceBitmap.PixelWidth * AspectRatio;
+            ImageHeight = sourceBitmap.PixelHeight * AspectRatio;
 
-            _croppingWindow.Width = width;
-            _croppingWindow.Height = height;
-            _croppingWindow.SetImage(new BitmapImage(new Uri(op.FileName)), width, height);
+            _croppingWindow.Width = ImageWidth;
+            _croppingWindow.Height = ImageHeight;
+            _croppingWindow.SetImage(new BitmapImage(new Uri(op.FileName)), ImageWidth, ImageHeight);
 
 
             _croppingWindow.Show();
@@ -60,10 +59,10 @@ namespace CroppingImageLibrary.SampleApp
         {
             var cropArea = _croppingWindow.CropTool.CropService.GetCroppedArea();
 
-            var x = Convert.ToInt32(cropArea.CroppedRectAbsolute.X);
-            var y = Convert.ToInt32(cropArea.CroppedRectAbsolute.Y);
-            var width = Convert.ToInt32(cropArea.CroppedRectAbsolute.Width);
-            var height = Convert.ToInt32(cropArea.CroppedRectAbsolute.Height);
+            var x = Convert.ToInt32(cropArea.CroppedRectAbsolute.X / AspectRatio);
+            var y = Convert.ToInt32(cropArea.CroppedRectAbsolute.Y / AspectRatio);
+            var width = Convert.ToInt32(cropArea.CroppedRectAbsolute.Width / AspectRatio);
+            var height = Convert.ToInt32(cropArea.CroppedRectAbsolute.Height / AspectRatio);
 
             var cb = new CroppedBitmap(sourceBitmap, new Int32Rect(x, y, width, height));       //select region rect
 

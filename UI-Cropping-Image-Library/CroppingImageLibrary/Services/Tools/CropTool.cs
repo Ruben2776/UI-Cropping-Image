@@ -21,7 +21,7 @@ namespace CroppingImageLibrary.Services.Tools
         public double Height => _cropShape.Shape.Height;
         public double Width => _cropShape.Shape.Width;
 
-        public CropTool(Canvas canvas , bool squareSelection = false)
+        public CropTool(Canvas canvas)
         {
             
             _canvas = canvas;
@@ -34,7 +34,7 @@ namespace CroppingImageLibrary.Services.Tools
                 new Rectangle {
                     Stroke = Brushes.White,
                     StrokeDashArray = new DoubleCollection(new double[] { 4, 4 })
-                } , squareSelection , _canvas);
+                } , _canvas);
 
             _shadeService = new ShadeTool(canvas, this);
             _thumbService = new ThumbTool(canvas, this);

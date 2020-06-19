@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Shapes;
 
 namespace CroppingImageLibrary.Services.Tools
@@ -8,28 +9,25 @@ namespace CroppingImageLibrary.Services.Tools
         public Shape Shape { get; }
         public Shape DashedShape { get; }
         private readonly Canvas _originalCanvas;
-        private readonly bool _squareSelection;
 
-        public CropShape(Shape shape, Shape dashedShape, bool squareSelection = false , Canvas overlayCanvas= null)
+        public CropShape(Shape shape, Shape dashedShape, Canvas overlayCanvas= null)
         {
             Shape = shape;
             DashedShape = dashedShape;
             _originalCanvas = overlayCanvas;
-            _squareSelection = squareSelection;
         }
 
         public void Redraw(double newX, double newY, double newWidth, double newHeight)
         {
             //dont use negative value
-            if (newHeight >= 0 && newWidth >= 0)
-            {
-                if(_squareSelection)
+            if (newHeight < 0 || newWidth < 0) { return; }
+
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
                 UpdateRectangle(newX, newY, newWidth, newHeight);
-                else
-                  RedrawSolidShape(newX, newY, newWidth, newHeight);
-                //
-                RedrawDashedShape();
-            }
+            else
+                RedrawSolidShape(newX, newY, newWidth, newHeight);
+            
+            RedrawDashedShape();
         }
 
         private void RedrawSolidShape(double newX, double newY, double newWidth, double newHeight)
